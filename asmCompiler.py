@@ -3,7 +3,6 @@ ADDR_BIT_LENGTH = 4
 
 import sys, time
 from instconfig import instconfig
-colorama.init()
 f = open(sys.argv[1])
 ramf = open('RAM.mmap', 'w')
 ramf.write('!{}:{}\n'.format(ADDR_BIT_LENGTH, INST_BIT_LENGTH))
@@ -27,9 +26,13 @@ for line in f.readlines():
             variables[line_items[0]] = ('{:0'+str(ADDR_BIT_LENGTH)+'b}').format(current_idx)
             line_items = line_items[1:]
         inst = instconfig[line_items[0]]
-        data = '0000'
+        data = ('{:0'+str(ADDR_BIT_LENGTH)+'b}').format(0)
         if len(line_items)>1:
-            data = variables[line_items[1]]
+            if line_items[1].startswith('#'):
+                line_items[1] = line_items[1][1:]
+                data = ('{:0'+str(ADDR_BIT_LENGTH)+'b}').format(int(line_items[1]))
+            else:
+                data = variables[line_items[1]]
         ramf.write(('{:0'+str(ADDR_BIT_LENGTH)+'b}:{}{}\n').format(current_idx, inst, data))
         current_idx += 1
 ramf.flush()

@@ -15,6 +15,8 @@ The `.armes.asm` files are somewhat similar to normal assembly, but still pretty
  They're created like `$new_constant 30`, where the `$` goes before the name, then the name, then a space, the numeric value. They can be used like `LDA $new_constant`
  * Labels or line names are for jumping to that line.  
  They're created like `!new_label CODE`, where the `!` goes before the name, then the name, then a space, the normal code. They're used like `JMP !new_label`
+ * Addresses are for referecing lines of code or anything that's in the RAM  
+ They're created like `#15`, where the `#` goes before the address, then the address. They're used like `JMP #2` or `LDA #15`
 
 Instructions can be found in the `instconfig.py`, but at the time I'm writing this there are:
  * `LDA` & `STA`: They take a memory address (a constant), and load or store from register A to RAM
