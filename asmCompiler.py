@@ -1,7 +1,7 @@
 INST_BIT_LENGTH = 8
 ADDR_BIT_LENGTH = 4
 
-import sys, time, colorama
+import sys, time
 from instconfig import instconfig
 colorama.init()
 f = open(sys.argv[1])
@@ -34,4 +34,4 @@ for line in f.readlines():
         current_idx += 1
 ramf.flush()
 ramf.close()
-print('> {} compiled in {}{}{}s{}!'.format(sys.argv[1], colorama.Fore.GREEN, colorama.Style.BRIGHT, time.process_time(), colorama.Style.RESET_ALL))
+print('> {} compiled in {}s!'.format(sys.argv[1], time.process_time()))
