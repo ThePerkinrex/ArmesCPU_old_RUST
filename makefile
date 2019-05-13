@@ -10,4 +10,4 @@ compile_cpu:
 	@rm -r cpu.spec
 
 compile:
-	@python3 asmCompiler.py program.armes.asm
+	@python3 asmCompiler.py programs/program.armes.asm

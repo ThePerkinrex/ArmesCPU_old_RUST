@@ -1,7 +1,8 @@
 from microinstconfig import microinst
+import time
 
-romF = open('ROM.rommap')
-romC = open('ROM.mmap', 'w')
+romF = open('programs/ROM.rommap')
+romC = open('memory/ROM.mmap', 'w')
 
 romLines = romF.readlines()
 first=True
@@ -35,3 +36,4 @@ for line in romLines:
 
 romC.flush()
 romC.close()
+print('> ROM compiled in {}s!'.format(time.process_time()))

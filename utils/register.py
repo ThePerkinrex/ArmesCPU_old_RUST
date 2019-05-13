@@ -1,20 +1,29 @@
+from config import *
+
 class Register:
     def __init__(self, length):
         self._value = 0
         self.length = length
     
     def set(self, value):
+        
         if value < 2**self.length:
             self._value = value
+            return 0
         else:
-            self._value = (2**self.length-1)&value
-            print('Register overflow')
+            if value < 0:
+                self._value = -value
+                return -1
+            else:
+                self._value = (2**self.length-1)&value
+                return 1
     
     def get(self):
         return self._value
     
     def add(self):
-        self._value += 1
+        if self._value + 1 < 2**self.length:
+            self._value += 1
 
     def __str__(self):
         return 'R'+repr(self)
@@ -35,4 +44,4 @@ class ConnectedRegister(Register):
 
 class InstructionRegister(ConnectedRegister):
     def putDataOnBus(self):
-        self._bus.set(self._value&15)
+        self._bus.set(self._value&(2**RAM_ADDR_LENGTH-1))
