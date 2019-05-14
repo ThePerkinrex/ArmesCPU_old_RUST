@@ -1,0 +1,6 @@
+[package]
+name = "CPU"
+version = "0.1.0"
+authors = ["theperkinrex <theperkinrex@gmail.com>"]
+
+[dependencies]
