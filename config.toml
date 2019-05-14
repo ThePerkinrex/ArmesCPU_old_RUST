@@ -1,0 +1,44 @@
+Name = "Armes 8 bit CPU"
+Data_length = 8
+RAM_addr_length = 4
+Microinst_length = 3
+
+RAM_filename = "memory/RAM.mmap"
+ROM_filename = "memory/ROM.mmap"
+
+[instructions]
+LDA =  0
+STA =  1
+LDB =  2
+STB =  3
+ADD =  4
+SUB =  5
+OUTB = 6
+OUTR = 7
+JMP =  8
+JO =   9
+JZ =   10
+JU =   11
+HLT =  15
+
+[microinstructions]
+RAI = 0  # RAM address in
+RCI = 1  # RAM contents in
+RCO = 2  # RAM contents out
+AI =  3  # A register in
+AO =  4  # A register out
+BI =  5  # A register in
+BO =  6  # A register out
+ICA = 7  # Instruction counter add
+ICI = 8  # Instruction counter in
+ICO = 9  # Instruction counter out
+IRI = 10 # Instruction regiter in
+IRO = 11 # Instruction regiter out
+OI =  12 # Output in
+OSH = 13 # Output show
+ADD = 14 # ALU add
+HLT = 15 # Halt
+FO =  16 # If overflow flag
+FZ =  17 # If zero flag
+FU =  18 # If underflow flag
+SUB = 19 # ALU sub
