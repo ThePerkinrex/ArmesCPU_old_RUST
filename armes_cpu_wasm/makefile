@@ -17,10 +17,16 @@ build:
 serve:
 	@python3 -m http.server -d $(web_dir)
 
+kill-serve:
+	@pkill -f "make serve"
+
 $(wasm_file): $(watchfiles)
-	@$(MAKE) build
+	@$(MAKE) build || $(MAKE) build-err
 
 build-require: $(wasm_file)
+build-err:
+	@echo "\n>> Hit enter when fixed"
+	@read
 
 watch:
 	@$(MAKE) build
@@ -29,4 +35,9 @@ watch:
 	@echo "      👀 WATCHING FOR CHANGES 👀"
 	@echo "====================================="
 	@echo ""
-	@while true; do $(MAKE) build-require -q || $(MAKE) build-require; sleep 0.5; done
+	@while true; do $(MAKE) build-require -q || $(MAKE) build-require;sleep 0.5; done
+
+watch-serve:
+	@$(MAKE) serve &
+	@$(MAKE) watch
+	@$(MAKE) kill-serve

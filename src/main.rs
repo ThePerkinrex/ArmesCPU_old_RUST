@@ -1,5 +1,6 @@
 extern crate armes_cpu_lib;
 use std::collections::HashMap;
+mod memoryloader;
 
 fn main() {
     println!("Hello, world!");
@@ -11,5 +12,7 @@ fn main() {
 
         instructions: HashMap::new(),
         microinstructions: HashMap::new(),
-    });
+    }, armes_cpu_lib::DefaultLogger::new());
+    memoryloader::load("memory/rom.mmap");
+
 }

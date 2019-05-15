@@ -1,5 +1,5 @@
-import { default as init } from './armes_cpu_lib.js';
-import * as wasm from './armes_cpu_lib.js';
+import { default as init } from './armes_cpu_wasm.js';
+import * as wasm from './armes_cpu_wasm.js';
 import {main} from "../index.js";
 
 async function run() {
@@ -13,7 +13,7 @@ async function run() {
     // Also note that the promise, when resolved, yields the wasm module's
     // exports which is the same as importing the `*_bg` module in other
     // modes
-    await init('/wasm/armes_cpu_lib_bg.wasm');
+    await init('/wasm/armes_cpu_wasm_bg.wasm');
     // And afterwards we can use all the functionality defined in wasm.
     main(wasm);
 }

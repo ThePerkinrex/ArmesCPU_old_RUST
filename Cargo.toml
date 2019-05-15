@@ -3,6 +3,18 @@ name = "armes_cpu_cli_wrapper"
 version = "0.1.0"
 authors = ["theperkinrex <theperkinrex@gmail.com>"]
 
+[[bin]]
+name = "romc"
+path = "src/romcompiler.rs"
+
+[[bin]]
+name = "asmc"
+path = "src/asmcompiler.rs"
+
+[[bin]]
+name = "cpu"
+path = "src/main.rs"
+
 [dependencies]
 armes_cpu_lib = { path = "armes_cpu_lib" }
 toml = "0.5.0"
