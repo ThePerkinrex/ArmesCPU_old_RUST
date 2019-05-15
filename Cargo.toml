@@ -15,6 +15,10 @@ path = "src/asmcompiler.rs"
 name = "cpu"
 path = "src/main.rs"
 
+[[bin]]
+name = "memdump"
+path = "src/memdump.rs"
+
 [dependencies]
 armes_cpu_lib = { path = "armes_cpu_lib" }
 toml = "0.5.0"

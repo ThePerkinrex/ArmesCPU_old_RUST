@@ -1,6 +1,8 @@
-use std::fs;
 use armes_cpu_lib::Memory;
+use std::io::Write;
+use std::fs;
 
+#[allow(dead_code)]
 pub fn load(file: &str) -> Memory {
     let data = fs::read(file).expect("Unable to read file");
     let mut addr_l: u32 = 4;
@@ -81,10 +83,10 @@ pub fn load(file: &str) -> Memory {
         mem.set(a[i], d[i]);
     }
 
-    println!("{}", mem);
     return mem;
 }
 
+#[allow(dead_code)]
 fn convert_to_bytes(v: Vec<u8>) -> usize {
     let mut r: usize = 0;
     let mut i: usize = 0;
@@ -94,4 +96,27 @@ fn convert_to_bytes(v: Vec<u8>) -> usize {
         i+=1;
     }
     return r;
+}
+
+#[allow(dead_code)]
+pub fn store(fname: &str, mem: Memory){
+    let mut f = fs::File::create(fname).expect("Could not open file");
+    let (addr_l, data_l) = mem.get_lengths();
+    f.write_all(format!("!{}:{}!{}:{}!", addr_l, data_l, addr_l/8+1, data_l/8+1).as_bytes()).expect("Unable to write file");
+    let mut n_d = Vec::new();
+    for i in 0..2_usize.pow(addr_l){
+        for j in 0..(addr_l/8+1) {
+            //println!(">{:x}:{}:{:x}", i, mem.get(i), (i>>j*8)&255);
+            n_d.push(((i>>j*8)&255) as u8);
+            //f.write(&vec![((i>>j*8)&255) as u8]).expect("Unable to write file");
+        }
+        for j in (0..(data_l/8+1)).rev() {
+            let d = mem.get(i);
+            //println!("-{}:{:x}:{:x}", j, d, (d>>j*8)&255);
+            n_d.push(((d>>j*8)&255) as u8);
+            //f.write(&vec![((d>>j*8)&255) as u8]).expect("Unable to write file");
+        }
+    }
+    f.write_all(&n_d).expect("Unable to write file");
+    f.flush().expect("Unable to flush file");
 }

@@ -23,6 +23,10 @@ impl Memory {
     pub fn get(&self, addr: usize) -> usize {
         return self.values[addr]
     }
+
+    pub fn get_lengths(&self) -> (u32, u32) {
+        return (self.addr_length, self.data_length)
+    }
 }
 impl Display for Memory {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {

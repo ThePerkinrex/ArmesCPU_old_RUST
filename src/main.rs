@@ -1,18 +1,13 @@
 extern crate armes_cpu_lib;
-use std::collections::HashMap;
-mod memoryloader;
+mod memory;
+mod configloader;
 
 fn main() {
     println!("Hello, world!");
-    armes_cpu_lib::run_cpu(armes_cpu_lib::Config {
-        name: "Armes 8bit CPU".to_string(),
-        data_length: 8,
-        ram_addr_length: 4,
-        microinst_length: 3,
-
-        instructions: HashMap::new(),
-        microinstructions: HashMap::new(),
-    }, armes_cpu_lib::DefaultLogger::new());
-    memoryloader::load("memory/rom.mmap");
-
+    let conf = configloader::load_cfg();
+    armes_cpu_lib::run_cpu(conf.clone(), armes_cpu_lib::DefaultLogger::new());
+    let rom = memory::load(&conf.clone().rom_filename.unwrap());
+    let ram = memory::load(&conf.clone().ram_filename.unwrap());
+    println!("{}", rom);
+    println!("{}", ram);
 }

@@ -1,9 +1,12 @@
-use std::io::Write;
-use std::fs;
+extern crate armes_cpu_lib;
+
+mod memory;
+mod configloader;
+use armes_cpu_lib::Memory;
 
 fn main() {
-    let mut f = fs::File::create("memory/rom.mmap").expect("Could not open file");
-    f.write_all(b"!7:16!1:2!").expect("Unable to write file");
-    f.write_all(&[0,0x00, 0xff,1, 0x0f, 0x12]).expect("Unable to write file");;
-    f.flush().expect("Unable to flush file");
+    let mut mem = Memory::new(7, 16);
+    mem.set(1, 0x11ff);
+    memory::store("memory/rom.mmap", mem);
+    configloader::load_cfg();
 }

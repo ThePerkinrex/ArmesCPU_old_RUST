@@ -1,10 +1,10 @@
-Name = "Armes 8 bit CPU"
-Data_length = 8
+name = "Armes 8 bit CPU"
+data_length = 8
 RAM_addr_length = 4
-Microinst_length = 3
+microinst_length = 3
 
-RAM_filename = "memory/RAM.mmap"
-ROM_filename = "memory/ROM.mmap"
+RAM_filename = "memory/ram.mmap"
+ROM_filename = "memory/rom.mmap"
 
 [instructions]
 LDA =  0
