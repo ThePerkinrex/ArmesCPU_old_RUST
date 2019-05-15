@@ -1,18 +1,23 @@
-web_dir := ./www
+web_dir := ./web
 wasm_dir := $(web_dir)/wasm
 
-wasm_file := $(wasm_dir)/armes_cpu_lib_bg.wasm
+wasm_file := $(wasm_dir)/armes_cpu_wasm_bg.wasm
+
+watchfiles = src/*.rs ../armes_cpu_lib/src/*.rs
 
 build:
 	@echo "====================================="
-	@echo "           🚧 BUILDING 🚧"
+	@echo "          🚧 BUILDING  🚧"
 	@echo "====================================="
 	@wasm-pack build --target web --out-dir $(wasm_dir)
+	@echo ">> Updating gitignore"
+	@echo "*" > $(wasm_dir)/.gitignore
+	@echo "!setup_wasm.js" >> $(wasm_dir)/.gitignore
 
 serve:
 	@python3 -m http.server -d $(web_dir)
 
-$(wasm_file): src/*.rs
+$(wasm_file): $(watchfiles)
 	@$(MAKE) build
 
 build-require: $(wasm_file)

@@ -1,0 +1,12 @@
+[package]
+name = "armes_cpu_wasm"
+version = "0.1.0"
+authors = ["theperkinrex <theperkinrex@gmail.com>"]
+edition = "2018"
+
+[dependencies]
+wasm-bindgen = "0.2"
+armes_cpu_lib = { path = "../armes_cpu_lib" }
+
+[lib]
+crate-type = ["cdylib", "rlib"]
