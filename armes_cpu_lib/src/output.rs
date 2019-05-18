@@ -2,6 +2,7 @@ pub trait Logger {
     fn log(&self, s: &String);
 }
 
+#[derive(Clone, Copy)]
 pub struct DefaultLogger {}
 
 impl DefaultLogger {

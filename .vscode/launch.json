@@ -1,0 +1,80 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug executable 'romc'",
+            "cargo": {
+                "args": [
+                    "build",
+                    "--bin=romc",
+                    "--package=armes_cpu_cli_wrapper"
+                ],
+                "filter": {
+                    "name": "romc",
+                    "kind": "bin"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug executable 'asmc'",
+            "cargo": {
+                "args": [
+                    "build",
+                    "--bin=asmc",
+                    "--package=armes_cpu_cli_wrapper"
+                ],
+                "filter": {
+                    "name": "asmc",
+                    "kind": "bin"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug executable 'cpu'",
+            "cargo": {
+                "args": [
+                    "build",
+                    "--bin=cpu",
+                    "--package=armes_cpu_cli_wrapper"
+                ],
+                "filter": {
+                    "name": "cpu",
+                    "kind": "bin"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug executable 'memdump'",
+            "cargo": {
+                "args": [
+                    "build",
+                    "--bin=memdump",
+                    "--package=armes_cpu_cli_wrapper"
+                ],
+                "filter": {
+                    "name": "memdump",
+                    "kind": "bin"
+                }
+            },
+            "args": [],
+            "cwd": "${workspaceFolder}"
+        },
+    ]
+}

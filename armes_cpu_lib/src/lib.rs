@@ -7,7 +7,9 @@ pub use memory::Memory;
 mod output;
 pub use output::{DefaultLogger, Logger};
 
-pub fn run_cpu<T: Logger>(config: Config, logger: T){
+pub mod compile;
+
+pub fn run_cpu<T: Logger>(config: Config, mut ram: Memory, rom: Memory,logger: T){
     macro_rules! log {
         // Note that this is using the `log` function imported above during
         // `bare_bones`
@@ -16,7 +18,6 @@ pub fn run_cpu<T: Logger>(config: Config, logger: T){
 
 
     log!("Initializing {}", config.name);
-    let mut ram = Memory::new(4, 8);
-    ram.set(0xf, 0xf);
-    log!("{:08b}", ram.get(0xf));
+    log!("{}", rom.get(0b000000000));
+    log!("{}", rom.get(0b000000100));
 }

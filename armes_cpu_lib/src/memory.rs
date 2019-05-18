@@ -2,7 +2,7 @@ use std::fmt::Display;
 use std::fmt;
 
 pub struct Memory {
-    values: Vec<usize>,
+    pub values: Vec<usize>,
     addr_length: u32,
     data_length: u32,
 }
@@ -17,7 +17,9 @@ impl Memory {
     }
 
     pub fn set(&mut self, addr: usize, value: usize) {
-        self.values[addr & (2_usize.pow(self.addr_length)-1)] = value & (2_usize.pow(self.data_length)-1)
+        self.values[addr & (2_usize.pow(self.addr_length)-1)] = value & (2_usize.pow(self.data_length)-1);
+        //println!("{}: {}\t{}: {}", addr, addr & (2_usize.pow(self.addr_length)-1), value,  value & (2_usize.pow(self.data_length)-1));
+        //println!("V: {} - {} - {}:", self.values.len(), 2_usize.pow(self.addr_length), addr, /*self.get(addr)*/);
     }
 
     pub fn get(&self, addr: usize) -> usize {

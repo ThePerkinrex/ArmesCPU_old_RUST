@@ -48,6 +48,7 @@ pub fn load(file: &str) -> Memory {
                 status+=1;
                 data_b = c.parse().unwrap();
                 c = String::new();
+                
             }
         } else if status == 4 {
             if i < addr_b{
@@ -57,7 +58,9 @@ pub fn load(file: &str) -> Memory {
                 i = 1;
                 status = 5;
                 n2.push(chr);
+                //println!("1 {:?} -> {}", n1.clone(), convert_to_bytes(n1.clone()));
             }
+            //println!("{}", chr as u8);
         }else if status == 5 {
             if i < data_b{
                 n2.push(chr);
@@ -65,24 +68,28 @@ pub fn load(file: &str) -> Memory {
             } else {
                 i = 1;
                 status = 4;
-                addresses.push(n1);
-                values.push(n2);
+                addresses.push(n1.clone());
+                values.push(n2.clone());
+                //println!("1 {:?} -> {}", n1.clone(), convert_to_bytes(n1.clone()));
+                //println!("2 {:?} -> {}", n2.clone(), convert_to_bytes(n2.clone()));
                 n1 = Vec::new();
                 n2 = Vec::new();
                 n1.push(chr);
             }
+            //println!("{}", chr);
         }
     }
     addresses.push(n1);
     values.push(n2);
+    //println!("{:?}:{:?}", addresses, values);
     let mut mem = Memory::new(addr_l, data_l);
     let a: Vec<usize> = addresses.into_iter().map(|x| convert_to_bytes(x)).collect();
     let d: Vec<usize> = values.into_iter().map(|x| convert_to_bytes(x)).collect();
-    
+    //println!("{:?}:{:?}", a, d);
     for i in 0..a.len() {
         mem.set(a[i], d[i]);
+        //println!("{}:{}", a[i], d[i]);
     }
-
     return mem;
 }
 
@@ -91,7 +98,7 @@ fn convert_to_bytes(v: Vec<u8>) -> usize {
     let mut r: usize = 0;
     let mut i: usize = 0;
     
-    for b in v.into_iter().rev() {
+    for b in v.into_iter() {
         r |= (b as usize)<<(8*i);
         i+=1;
     }
@@ -102,17 +109,21 @@ fn convert_to_bytes(v: Vec<u8>) -> usize {
 pub fn store(fname: &str, mem: Memory){
     let mut f = fs::File::create(fname).expect("Could not open file");
     let (addr_l, data_l) = mem.get_lengths();
-    f.write_all(format!("!{}:{}!{}:{}!", addr_l, data_l, addr_l/8+1, data_l/8+1).as_bytes()).expect("Unable to write file");
+    let (addr_b, data_b) = ((addr_l as f64/8.0).ceil() as usize, (data_l as f64/8.0).ceil() as usize);
+
+    //println!("!{}:{}!{}:{}!", addr_l, data_l, addr_b, data_b);
+    f.write_all(format!("!{}:{}!{}:{}!", addr_l, data_l, addr_b, data_b).as_bytes()).expect("Unable to write file");
     let mut n_d = Vec::new();
     for i in 0..2_usize.pow(addr_l){
-        for j in 0..(addr_l/8+1) {
-            //println!(">{:x}:{}:{:x}", i, mem.get(i), (i>>j*8)&255);
+        for j in 0..addr_b {
+            //println!(">{}:{}", i, ((i>>j*8)&255) as u8);
             n_d.push(((i>>j*8)&255) as u8);
+
             //f.write(&vec![((i>>j*8)&255) as u8]).expect("Unable to write file");
         }
-        for j in (0..(data_l/8+1)).rev() {
+        for j in 0..data_b {
             let d = mem.get(i);
-            //println!("-{}:{:x}:{:x}", j, d, (d>>j*8)&255);
+            //println!("-{}:{}", d, ((d>>j*8)&255) as u8);
             n_d.push(((d>>j*8)&255) as u8);
             //f.write(&vec![((d>>j*8)&255) as u8]).expect("Unable to write file");
         }

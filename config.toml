@@ -2,6 +2,7 @@ name = "Armes 8 bit CPU"
 data_length = 8
 RAM_addr_length = 4
 microinst_length = 3
+flag_length = 2
 
 RAM_filename = "memory/ram.mmap"
 ROM_filename = "memory/rom.mmap"
