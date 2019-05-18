@@ -2,6 +2,7 @@ use Memory;
 use Config;
 use std::iter::FromIterator;
 
+
 pub fn asm(s: String, c: Config) -> Memory{
     let mut mem = Memory::new(c.ram_addr_length as u32, c.data_length as u32);
     let asm_arr: Vec<&str> = s.split("\n").collect();
@@ -9,10 +10,11 @@ pub fn asm(s: String, c: Config) -> Memory{
     mem.set(0, 0b0000_1111); // LDA 15
     mem.set(1, 0b0100_1110); // ADD 14
     mem.set(2, 0b0110_0000); // OUTB
-    mem.set(3, 0b1111_0000); // HLT
+    mem.set(3, 0b0011_1110); // STB 14
+    mem.set(4, 0b1000_0001); // JMP 1
 
-    mem.set(14, 0b00000010); // 2
-    mem.set(15, 0b00000110); // 6
+    mem.set(14, 0b00000001); // 2
+    mem.set(15, 0b00000001); // 6
     return mem;
 }
 
@@ -68,7 +70,8 @@ fn convert_microinst(cmds: String, c: Config) -> usize {
     let mut r: usize = 0;
     for cmd in cmds.split_ascii_whitespace() {
         //println!("{}: {}", cmd, c.microinstructions.get(cmd).unwrap());
-        r |= c.microinstructions.get(cmd).unwrap();
+        
+        r |= c.microinstructions.get(cmd).expect(&format!("{} is not a valid command", cmd));
     }
     return r;
 }

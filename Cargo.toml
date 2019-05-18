@@ -22,3 +22,4 @@ path = "src/memdump.rs"
 [dependencies]
 armes_cpu_lib = { path = "armes_cpu_lib" }
 toml = "0.5.0"
+regex = "1.1.6"
