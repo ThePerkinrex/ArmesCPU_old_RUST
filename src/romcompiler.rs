@@ -21,6 +21,7 @@ fn main() {
     let c = configloader::load_cfg();
     let mut rommap = fs::read_to_string("uncompiled/rom.rommap").expect("Error reading rommap");
     // Replace the references to instructions with the instruction
+    // On the wasm, this will be done by the JS
     let re = Regex::new(r"\$\{(\w+)\}").unwrap();
     let rm_clone = rommap.clone();
     let captures = re.captures_iter(&rm_clone);
