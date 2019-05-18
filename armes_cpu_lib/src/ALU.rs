@@ -1,6 +1,6 @@
 pub struct ALU {}
 
-use {Bus, ConnectedRegister};
+use ConnectedRegister;
 
 impl ALU {
     pub fn add(a_reg: &ConnectedRegister, b_reg: &mut ConnectedRegister) {
