@@ -46,16 +46,16 @@ pub fn asm(s: String, c: Config) -> Memory {
     i = 0;
     for line in &n_lines {
         let line_s: Vec<&str> = line.split(" ").collect();
-        let inst = c.instructions.get(line_s[0]).unwrap();
+        let inst = c.instructions.get(line_s[0]).expect(&format!("{} isnt a instruction", line_s[0]));
         let mut data = 0;
         if let Some(d) = line_s.get(1) {
             if d.starts_with("#") {
                 data = usize::from_str(d.get(1..d.len()).unwrap()).unwrap();
             }else{
-                data = *variables.get(d).unwrap();
+                data = *variables.get(d).expect("Variable not found");
             }
         }
-        println!("{}: {} {}", i, inst, data);
+        //println!("{}: {} {}", i, inst, data);
         mem.set(i, (inst << c.ram_addr_length) | (data & (2_usize.pow(c.ram_addr_length as u32)-1)));
         i += 1;
     }

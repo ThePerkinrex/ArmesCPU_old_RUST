@@ -17,7 +17,7 @@ use alu::ALU;
 
 #[allow(unused_mut)]
 #[allow(unused_variables)]
-pub fn run_cpu<T: Logger>(config: Config, mut ram: Memory, rom: Memory, logger: T) {
+pub fn run_cpu<L: Logger, O: Output>(config: Config, mut ram: Memory, rom: Memory, logger: L, out: &mut O) {
     macro_rules! log {
         ($($t:tt)*) => (logger.log(&format_args!($($t)*).to_string()))
     }
@@ -30,7 +30,7 @@ pub fn run_cpu<T: Logger>(config: Config, mut ram: Memory, rom: Memory, logger: 
     let mut b_reg = ConnectedRegister::new(config.data_length);
     let mut inst_reg = InstRegister::new(config.clone());
     let mut inst_counter = ConnectedRegister::new(config.ram_addr_length);
-    let mut out = DefaultOutput::new(&logger, config.data_length);
+    //let mut out = DefaultOutput::new(&logger, config.data_length);
     log!("Initialized!");
     loop {
         let mut halting = false;

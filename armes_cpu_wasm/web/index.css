@@ -1,0 +1,8 @@
+.scripts {
+    display: inline-block;
+    width: 25%;
+}
+
+.scripts div.s_write {
+    width: 98%;
+}

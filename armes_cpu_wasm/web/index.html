@@ -1,8 +1,118 @@
 <html>
-  <head>
-    <meta content="text/html;charset=utf-8" http-equiv="Content-Type"/>
-  </head>
-  <body>
+
+<head>
+    <meta content="text/html;charset=utf-8" http-equiv="Content-Type" />
+    <link rel="stylesheet" href="index.css" />
+    <link rel="stylesheet" href="lib/codemirror.css">
+    <script src="lib/codemirror.js"></script>
+    <script src="addon/mode/simple.js"></script>
+    <script src="mode/armes_asm.js"></script>
+    <script src="mode/rommap.js"></script>
+    <script src="mode/toml.js"></script>
+</head>
+
+<body>
+    <div class="scripts"><label for="ASM">Assembly (asm)</label><br><textarea id="ASM" class="s_write">
+; A fibonacci sequence
+;$0 0
+;$1 1
+;LDB $1
+;!fib LDA $0 ; Comment
+;ADD
+;OUTB
+;STB
+;JO !hlt
+;JMP !fib
+;!hlt HLT
+; ------------------
+
+$O 255
+OUTR $O
+HLT
+    </textarea><br><button id="asmc">Compile Assembly</button></div>
+    <div class="scripts"><label for="ROM">Rommap</label><br><textarea id="ROM" class="s_write">
+xxxx000xx: ICO RAI
+xxxx001xx: RCO IRI ICA
+
+${LDA}010xx: IRO RAI
+${LDA}011xx: RCO AI
+
+${STA}010xx: IRO RAI
+${STA}011xx: AO RCI
+
+${LDB}010xx: IRO RAI
+${LDB}011xx: RCO BI
+
+${STB}010xx: IRO RAI
+${STB}011xx: BO RCI
+
+${ADD}010xx: IRO RAI
+${ADD}011xx: RCO BI
+${ADD}100xx: ADD
+
+${SUB}010xx: IRO RAI
+${SUB}011xx: RCO BI
+${SUB}100xx: SUB
+
+${OUTB}010xx: BO OI
+${OUTB}011xx: OSH
+
+${OUTR}010xx: IRO RAI
+${OUTR}011xx: RCO OI
+${OUTR}100xx: OSH
+
+${JMP}010xx: IRO ICI
+
+${JO}0101x: IRO ICI
+
+${JZ}010x1: IRO ICI
+
+${HLT}010xx: HLT
+    </textarea><br><button id="romc">Compile Rommap</button></div>
+    <div class="scripts"><label for="toml">Config</label><br><textarea id="toml" class="s_write">
+name = "Armes 8 bit CPU"
+data_length = 8
+RAM_addr_length = 4
+microinst_length = 3
+flag_length = 2
+
+RAM_filename = "memory/ram.mmap"
+ROM_filename = "memory/rom.mmap"
+
+[instructions]
+LDA =  0
+STA =  1
+LDB =  2
+STB =  3
+ADD =  4
+SUB =  5
+OUTB = 6
+OUTR = 7
+JMP =  8
+JO =   9
+JZ =   10
+JU =   11
+HLT =  15
+
+[microinstructions]
+RAI = 0  # RAM address in
+RCI = 1  # RAM contents in
+RCO = 2  # RAM contents out
+AI =  3  # A register in
+AO =  4  # A register out
+BI =  5  # A register in
+BO =  6  # A register out
+ICA = 7  # Instruction counter add
+ICI = 8  # Instruction counter in
+ICO = 9  # Instruction counter out
+IRI = 10 # Instruction regiter in
+IRO = 11 # Instruction regiter out
+OI =  12 # Output in
+OSH = 13 # Output show
+ADD = 14 # ALU add
+HLT = 15 # Halt
+SUB = 16 # ALU sub
+    </textarea></div>
     <!-- Note the usage of `type=module` here as this is an ES6 module -->
     <script type="module" src="./wasm/setup_wasm.js"></script>
 </body>
