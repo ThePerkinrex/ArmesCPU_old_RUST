@@ -2,7 +2,7 @@
 $0 0
 $1 1
 LDB $1
-!fib LDA $0
+!fib LDA $0 ; Comment
 ADD
 OUTB
 STB
