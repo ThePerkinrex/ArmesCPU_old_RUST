@@ -2,6 +2,7 @@ extern crate wasm_bindgen;
 extern crate console_error_panic_hook;
 use std::panic;
 use wasm_bindgen::prelude::*;
+use std::ops::Deref;
 
 mod wasm_memory;
 mod configloader;
@@ -34,6 +35,10 @@ impl armes_cpu_lib::Logger for Logger {
 }
 
 //let mut ram: armes_cpu_lib::Memory;
+//#[wasm_bindgen]
+//trait wasm_abi: wasm_bindgen::convert::IntoWasmAbi {}
+
+//impl wasm_bindgen::convert::IntoWasmAbi for Config {}
 
 #[wasm_bindgen]
 pub fn compile_asm(s: &str, conf_s: &str) -> wasm_memory::WasmMemory {
@@ -42,6 +47,20 @@ pub fn compile_asm(s: &str, conf_s: &str) -> wasm_memory::WasmMemory {
     let mem = compile::asm(String::from(s), conf);
     wasm_memory::memory_to_wasm(mem)
 }
+
+#[wasm_bindgen]
+pub fn compile_rom(s: &str, conf_s: &str) -> wasm_memory::WasmMemory {
+    let conf = configloader::load_cfg(conf_s);
+
+    let mem = compile::rom(String::from(s), conf);
+    wasm_memory::memory_to_wasm(mem)
+}
+
+#[wasm_bindgen]
+pub fn load_instructions(cfg: &str) -> String {
+    format!("{:?}",configloader::load_cfg(cfg).instructions)
+}
+
 
 #[wasm_bindgen]
 pub fn print_mem(m: wasm_memory::WasmMemory) {

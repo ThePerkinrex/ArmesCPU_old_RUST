@@ -7,7 +7,7 @@ pub fn load_cfg(conf_string: &str) -> Config {
     let t: toml::Value = toml::from_str(conf_string).expect("Error parsing TOML");
     let inst = t.get("instructions").expect("COnfig format WrOnG");
     let microinst = t.get("microinstructions").expect("COnfig format WrOnG");
-
+    
     let inst_hashmap: HashMap<String, usize> = HashMap::from_iter(
         inst.as_table().expect("Table")
         .into_iter().map(|(x, y)|{
@@ -18,6 +18,7 @@ pub fn load_cfg(conf_string: &str) -> Config {
         .into_iter().map(|(x, y)|{
             (x.clone(), 1<<y.as_integer().unwrap() as usize)
         }));
+    
 
     Config {
         name: String::from(t.get("name").expect("COnfig format WrOnG").as_str().unwrap()),

@@ -4,6 +4,7 @@
     <meta content="text/html;charset=utf-8" http-equiv="Content-Type" />
     <link rel="stylesheet" href="index.css" />
     <link rel="stylesheet" href="lib/codemirror.css">
+    <script src="lib/toml.js"></script>
     <script src="lib/codemirror.js"></script>
     <script src="addon/mode/simple.js"></script>
     <script src="mode/armes_asm.js"></script>
@@ -113,6 +114,20 @@ ADD = 14 # ALU add
 HLT = 15 # Halt
 SUB = 16 # ALU sub
     </textarea></div>
+    <div id="cli_wrapper1">
+        <div id="cli_wrapper2">
+            <span>CLI</span>
+            <div id="cli">
+                <div id="cli_contents">
+                    <span class="out">Compiling asm</span><br>
+                    <span class="out">Done!</span><br>
+                    <span class="out"></span><br>
+                    <span class="out">>> 255</span><br>
+                </div>
+            <span id="cmd_dollar">$</span><input type="text" id="cmd">
+            </div>
+        </div>
+    </div>
     <!-- Note the usage of `type=module` here as this is an ES6 module -->
     <script type="module" src="./wasm/setup_wasm.js"></script>
 </body>
