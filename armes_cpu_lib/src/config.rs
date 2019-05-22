@@ -6,7 +6,6 @@ pub struct Config {
     pub data_length: usize,
     pub ram_addr_length: usize,
     pub microinst_length: usize,
-    pub flag_length: usize,
 
     pub instructions: HashMap<String, usize>,
     pub microinstructions: HashMap<String, usize>,

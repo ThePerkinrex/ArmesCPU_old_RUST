@@ -1,14 +1,15 @@
 extern crate wasm_bindgen;
 extern crate console_error_panic_hook;
-use std::panic;
+use std::{panic, thread};
 use wasm_bindgen::prelude::*;
 use std::ops::Deref;
 
 mod wasm_memory;
+use wasm_memory::WasmMemory;
 mod configloader;
 
 extern crate armes_cpu_lib;
-use armes_cpu_lib::{compile, Config};
+use armes_cpu_lib::{compile, Config, ConnectedRegister, Bus};
 use std::collections::HashMap;
 
 
@@ -16,6 +17,7 @@ use std::collections::HashMap;
 #[wasm_bindgen]
 extern {
     fn alert(s: &str);
+    fn printToCLI(s: &str);
 
     #[wasm_bindgen(js_namespace = console)]
     fn log(s: &str);
@@ -34,6 +36,30 @@ impl armes_cpu_lib::Logger for Logger {
     }
 }
 
+struct Output {
+    reg: armes_cpu_lib::ConnectedRegister
+}
+
+impl Output {
+    pub fn new(length: usize) -> Output {
+        Output {
+            reg: ConnectedRegister::new(length)
+        }
+    }
+}
+
+impl armes_cpu_lib::Output for Output {
+    fn in_from_bus(&mut self, bus: &Bus) {
+        self.reg.get_from_bus(bus);
+    }
+
+    fn show(&self) {
+        printToCLI(&format!("OUT >> {}", self.reg._get()));
+    }
+}
+
+
+
 //let mut ram: armes_cpu_lib::Memory;
 //#[wasm_bindgen]
 //trait wasm_abi: wasm_bindgen::convert::IntoWasmAbi {}
@@ -41,7 +67,7 @@ impl armes_cpu_lib::Logger for Logger {
 //impl wasm_bindgen::convert::IntoWasmAbi for Config {}
 
 #[wasm_bindgen]
-pub fn compile_asm(s: &str, conf_s: &str) -> wasm_memory::WasmMemory {
+pub fn compile_asm(s: &str, conf_s: &str) -> WasmMemory {
     let conf = configloader::load_cfg(conf_s);
 
     let mem = compile::asm(String::from(s), conf);
@@ -49,7 +75,7 @@ pub fn compile_asm(s: &str, conf_s: &str) -> wasm_memory::WasmMemory {
 }
 
 #[wasm_bindgen]
-pub fn compile_rom(s: &str, conf_s: &str) -> wasm_memory::WasmMemory {
+pub fn compile_rom(s: &str, conf_s: &str) -> WasmMemory {
     let conf = configloader::load_cfg(conf_s);
 
     let mem = compile::rom(String::from(s), conf);
@@ -63,7 +89,7 @@ pub fn load_instructions(cfg: &str) -> String {
 
 
 #[wasm_bindgen]
-pub fn print_mem(m: wasm_memory::WasmMemory) {
+pub fn print_mem(m: WasmMemory) {
     console_log!("{}", wasm_memory::wasm_to_memory(m));
 }
 
@@ -71,17 +97,12 @@ pub fn print_mem(m: wasm_memory::WasmMemory) {
 pub fn init_wasm() {
     panic::set_hook(Box::new(console_error_panic_hook::hook));
     //console_log!("Hello, wasm!\nFormat {} t #{}", "this", 2);
-    /*armes_cpu_lib::run_cpu(armes_cpu_lib::Config {
-        name: "Armes 8bit CPU".to_string(),
-        data_length: 8,
-        ram_addr_length: 4,
-        microinst_length: 3,
-        flag_length: 2,
-        
-        ram_filename: None,
-        rom_filename: None,
+}
 
-        instructions: HashMap::new(),
-        microinstructions: HashMap::new(),
-    }, Logger{});*/
+#[wasm_bindgen]
+pub fn run_cpu(cfg: &str, ram: WasmMemory, rom: WasmMemory) {
+    let conf = configloader::load_cfg(cfg);
+    let mut out = Output::new(conf.data_length);
+    armes_cpu_lib::run_cpu(conf, wasm_memory::wasm_to_memory(ram), wasm_memory::wasm_to_memory(rom), Logger{}, &mut out);
+    //printToCLI("Thread started");
 }

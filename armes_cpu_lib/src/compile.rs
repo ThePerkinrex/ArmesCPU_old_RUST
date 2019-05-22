@@ -3,6 +3,7 @@ use std::iter::FromIterator;
 use std::str::FromStr;
 use Config;
 use Memory;
+use flags;
 
 pub fn asm(s: String, c: Config) -> Memory {
     let mut mem = Memory::new(c.ram_addr_length as u32, c.data_length as u32);
@@ -76,7 +77,7 @@ pub fn asm(s: String, c: Config) -> Memory {
 
 pub fn rom(s: String, c: Config) -> Memory {
     let mut mem = Memory::new(
-        (c.ram_addr_length + c.microinst_length + c.flag_length) as u32,
+        (c.ram_addr_length + c.microinst_length + flags::number) as u32,
         c.microinstructions.len() as u32,
     );
     //let rommap = fs::read_to_string("uncompiled/rom.rommap").expect("Error reading rommap");

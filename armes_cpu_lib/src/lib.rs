@@ -1,7 +1,7 @@
 mod config;
 pub use config::Config;
 mod register;
-use register::{ConnectedRegister, InstRegister, Register};
+pub use register::{ConnectedRegister, InstRegister, Register};
 mod memory;
 pub use memory::Memory;
 mod output;
@@ -10,10 +10,12 @@ pub use output::{DefaultLogger, DefaultOutput, Logger, Output};
 pub mod compile;
 
 mod bus;
-use bus::Bus;
+pub use bus::Bus;
 
 mod alu;
 use alu::ALU;
+
+mod flags;
 
 #[allow(unused_mut)]
 #[allow(unused_variables)]
@@ -28,23 +30,27 @@ pub fn run_cpu<L: Logger, O: Output>(config: Config, mut ram: Memory, rom: Memor
     let mut a_reg = ConnectedRegister::new(config.data_length);
     let mut ram_addr_reg = ConnectedRegister::new(config.ram_addr_length);
     let mut b_reg = ConnectedRegister::new(config.data_length);
+    let mut flags_reg = flags::F_Register::new();
     let mut inst_reg = InstRegister::new(config.clone());
     let mut inst_counter = ConnectedRegister::new(config.ram_addr_length);
     //let mut out = DefaultOutput::new(&logger, config.data_length);
     log!("Initialized!");
     loop {
         let mut halting = false;
+        
         for i in 0..2_usize.pow(config.microinst_length as u32) {
             let inst = inst_reg.get_inst();
             
             let minst = rom.get(
-                inst << (config.microinst_length + config.flag_length)
-                    | i << config.flag_length
-                    | 0, /*For now no flags*/
+                inst << (config.microinst_length + flags::number)
+                    | i << flags::number
+                    | flags_reg.get(), /*For now no flags*/
             );
             if minst == 0 {
                 continue; // Skip empty microinstruction sets
             }
+            log!("{:04b}{:03b}{:02b}: {:019b}", inst, i, flags_reg.get(), minst);
+            
             //log!("{:04b} {:03b}: {:016b}",inst, i, minst); 
             // First the outs
             if check_minst(minst, *config.microinstructions.get("RCO").unwrap()) {
@@ -95,10 +101,10 @@ pub fn run_cpu<L: Logger, O: Output>(config: Config, mut ram: Memory, rom: Memor
                 out.show();
             }
             if check_minst(minst, *config.microinstructions.get("ADD").unwrap()) {
-                ALU::add(&a_reg, &mut b_reg);
+                ALU::add(&a_reg, &mut b_reg, &mut flags_reg);
             }
             if check_minst(minst, *config.microinstructions.get("SUB").unwrap()) {
-                ALU::sub(&a_reg, &mut b_reg);
+                ALU::sub(&a_reg, &mut b_reg, &mut flags_reg);
             }
             if check_minst(minst, *config.microinstructions.get("HLT").unwrap()) {
                 halting = true;

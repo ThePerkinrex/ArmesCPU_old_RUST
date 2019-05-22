@@ -25,7 +25,6 @@ pub fn load_cfg(conf_string: &str) -> Config {
         data_length: t.get("data_length").expect("COnfig format WrOnG").as_integer().unwrap() as usize,
         ram_addr_length: t.get("RAM_addr_length").expect("COnfig format WrOnG").as_integer().unwrap() as usize,
         microinst_length: t.get("microinst_length").expect("COnfig format WrOnG").as_integer().unwrap() as usize,
-        flag_length: t.get("flag_length").expect("COnfig format WrOnG").as_integer().unwrap() as usize,
 
         microinstructions: microinst_hashmap,
         instructions: inst_hashmap,
